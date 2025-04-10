@@ -5,14 +5,14 @@ package main
 yes, utils.go is a terrible name, it is what it is, for now anyway.
 
 License: MIT
-Copyright (c) 2023 Lasse Østerild
+Copyright (c) 2025 Lasse Østerild
 
 */
 
 import (
 	"time"
 
-	sdk "github.com/CometBackup/comet-go-sdk"
+	sdk "github.com/CometBackup/comet-go-sdk/v2"
 	"github.com/ijt/go-anytime"
 )
 

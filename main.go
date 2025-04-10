@@ -6,17 +6,18 @@ Rudimentary tool for listing backup jobs on Comet Backup servers.
 This is a work in progress, expect changes.
 
 License: MIT
-Copyright (c) 2023 Lasse Østerild
+Copyright (c) 2025 Lasse Østerild
 
 */
 
 import (
+	"context"
 	"flag"
 	"log"
 	"os"
 	"time"
 
-	sdk "github.com/CometBackup/comet-go-sdk"
+	sdk "github.com/CometBackup/comet-go-sdk/v2"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -42,11 +43,11 @@ func NewClient(url, username, password string) (*Client, error) {
 
 // GetUserProfile retrieves user profile from Comet server
 // unless it is already present in map
-func (c *Client) GetUserProfile(user string) error {
+func (c *Client) GetUserProfile(ctx context.Context, user string) error {
 	if _, exists := c.users[user]; exists {
 		return nil
 	} else {
-		up, err := c.client.AdminGetUserProfile(user)
+		up, err := c.client.AdminGetUserProfile(ctx, user)
 		if err != nil {
 			return err
 		}
@@ -57,8 +58,8 @@ func (c *Client) GetUserProfile(user string) error {
 	return nil
 }
 
-func (c *Client) GetProtectedItemName(user, sourceguid string) string {
-	err := c.GetUserProfile(user)
+func (c *Client) GetProtectedItemName(ctx context.Context, user, sourceguid string) string {
+	err := c.GetUserProfile(ctx, user)
 	if err != nil {
 		log.Fatal("failed to get user profile", err)
 	}
@@ -73,27 +74,31 @@ func (c *Client) GetProtectedItemName(user, sourceguid string) string {
 }
 
 // ListJobs prints jobs to stdout given start and end times
-func (c *Client) ListJobs(start, end int64) error {
+func (c *Client) ListJobs(ctx context.Context, start, end int64) error {
 	var lines = [][]string{}
 
-	jobs, err := c.client.AdminGetJobsForDateRange(int(start), int(end))
+	jobs, err := c.client.AdminGetJobsForDateRange(ctx, int(start), int(end))
 	if err != nil {
 		return err
 	}
 
 	for _, j := range jobs {
 		var e, pitem string
+
+		// jobs with EndTime 0 are "incomplete"
 		if j.EndTime == 0 {
 			e = "incomplete"
 		} else {
 			e = time.Unix(j.EndTime, 0).Format("2006-01-02 15:04:05")
 		}
+		// if job doesn't have a protected item GUID, set it to blank
 		if j.SourceGUID == "" {
 			pitem = ""
 		} else {
-			pitem = c.GetProtectedItemName(j.Username, j.SourceGUID)
+			pitem = c.GetProtectedItemName(ctx, j.Username, j.SourceGUID)
 		}
 
+		// build table slice
 		line := []string{
 			j.Username,
 			pitem,
@@ -142,5 +147,8 @@ func main() {
 		log.Fatal("failed to parse 'until' date", err)
 	}
 
-	client.ListJobs(s, e)
+	// required for Comet SDK v2.x
+	ctx := context.Background()
+
+	client.ListJobs(ctx, s, e)
 }
