@@ -19,6 +19,7 @@ import (
 
 	sdk "github.com/CometBackup/comet-go-sdk/v2"
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/tw"
 )
 
 type Client struct {
@@ -112,10 +113,23 @@ func (c *Client) ListJobs(ctx context.Context, start, end int64) error {
 		// fmt.Printf("%-30s  %-40.40s  %-14s  %-10s  %s  %s\n", j.Username, pitem, jobClassificationText(j.Classification), jobStatusText(j.Status), time.Unix(j.StartTime, 0).Format("2006-01-02 15:04:05"), e)
 	}
 
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"User", "Protected Item", "Type", "Status", "Start", "End"})
-	table.SetAutoWrapText(false)
-	table.AppendBulk(lines)
+	// https://github.com/olekukonko/tablewriter/blob/master/MIGRATION.md
+	cfg := tablewriter.Config{
+		Header: tw.CellConfig{
+			Alignment:  tw.CellAlignment{Global: tw.AlignCenter},
+			Formatting: tw.CellFormatting{AutoFormat: tw.Off},
+		},
+		Row: tw.CellConfig{
+			Alignment:  tw.CellAlignment{Global: tw.AlignLeft},
+			Formatting: tw.CellFormatting{AutoFormat: tw.Off},
+		},
+		//MaxWidth: 80,
+		Behavior: tw.Behavior{TrimSpace: tw.On},
+	}
+
+	table := tablewriter.NewTable(os.Stdout, tablewriter.WithConfig(cfg))
+	table.Header("User", "Protected Item", "Type", "Status", "Start", "End")
+	table.Bulk(lines)
 	table.Render()
 
 	return nil
