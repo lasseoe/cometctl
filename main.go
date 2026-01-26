@@ -85,12 +85,14 @@ func (c *Client) ListJobs(ctx context.Context, start, end int64) error {
 
 	for _, j := range jobs {
 		var e, pitem string
+		var dur time.Duration
 
 		// jobs with EndTime 0 are "incomplete"
 		if j.EndTime == 0 {
 			e = "incomplete"
 		} else {
 			e = time.Unix(j.EndTime, 0).Format("2006-01-02 15:04:05")
+			dur = time.Duration(j.EndTime-j.StartTime) * time.Second
 		}
 		// if job doesn't have a protected item GUID, set it to blank
 		if j.SourceGUID == "" {
@@ -107,6 +109,7 @@ func (c *Client) ListJobs(ctx context.Context, start, end int64) error {
 			jobStatusText(j.Status),
 			time.Unix(j.StartTime, 0).Format("2006-01-02 15:04:05"),
 			e,
+			dur.String(),
 		}
 		lines = append(lines, line)
 
@@ -128,7 +131,7 @@ func (c *Client) ListJobs(ctx context.Context, start, end int64) error {
 	}
 
 	table := tablewriter.NewTable(os.Stdout, tablewriter.WithConfig(cfg))
-	table.Header("User", "Protected Item", "Type", "Status", "Start", "End")
+	table.Header("User", "Protected Item", "Type", "Status", "Start", "End", "Duration")
 	table.Bulk(lines)
 	table.Render()
 
