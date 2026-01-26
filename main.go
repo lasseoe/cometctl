@@ -123,7 +123,8 @@ func (c *Client) ListJobs(ctx context.Context, start, end int64) error {
 			Formatting: tw.CellFormatting{AutoFormat: tw.Off},
 		},
 		Row: tw.CellConfig{
-			Alignment:  tw.CellAlignment{Global: tw.AlignLeft},
+			Alignment: tw.CellAlignment{PerColumn: []tw.Align{tw.Skip, tw.Skip, tw.Skip, tw.Skip, tw.Skip, tw.Skip, tw.AlignRight}},
+			//Alignment:  tw.CellAlignment{Global: tw.AlignLeft},
 			Formatting: tw.CellFormatting{AutoFormat: tw.Off},
 		},
 		//MaxWidth: 80,
