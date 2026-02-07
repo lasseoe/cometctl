@@ -9,9 +9,9 @@ require (
 )
 
 require (
-	github.com/clipperhouse/displaywidth v0.8.0 // indirect
+	github.com/clipperhouse/displaywidth v0.9.0 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.4.0 // indirect
+	github.com/clipperhouse/uax29/v2 v2.5.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/ijt/goparsify v0.0.0-20221203142333-3a5276334b8d // indirect
 	github.com/josharian/intern v1.0.0 // indirect

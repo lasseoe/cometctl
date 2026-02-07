@@ -85,7 +85,7 @@ func (c *Client) ListJobs(ctx context.Context, start, end int64) error {
 
 	for _, j := range jobs {
 		var e, pitem string
-		var dur time.Duration
+		var dur time.Duration = 0
 
 		// jobs with EndTime 0 are "incomplete"
 		if j.EndTime == 0 {
