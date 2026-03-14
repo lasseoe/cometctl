@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/CometBackup/comet-go-sdk/v2 v2.7.0
 	github.com/ijt/go-anytime v1.9.2
-	github.com/olekukonko/tablewriter v1.1.3
+	github.com/olekukonko/tablewriter v1.1.4
 )
 
 require (
@@ -13,7 +13,7 @@ require (
 	github.com/clipperhouse/displaywidth v0.11.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
-	github.com/goccy/go-json v0.10.5 // indirect
+	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/ijt/goparsify v0.0.0-20221203142333-3a5276334b8d // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.9.1 // indirect
