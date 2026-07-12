@@ -1,0 +1,2 @@
+PASS="moBf9dZMpZb2v74ExY"
+./cometctl -u admin -p ${PASS} -s https://comet.backup112.dk --since "24 hours ago"
