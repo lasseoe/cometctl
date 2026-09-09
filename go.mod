@@ -1,6 +1,6 @@
 module github.com/lasseoe/cometctl
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/CometBackup/comet-go-sdk/v2 v2.7.0
@@ -23,5 +23,5 @@ require (
 	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
 	github.com/olekukonko/errors v1.3.0 // indirect
 	github.com/olekukonko/ll v0.1.8 // indirect
-	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/sys v0.48.0 // indirect
 )
