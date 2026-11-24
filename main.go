@@ -15,6 +15,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"sort"
 	"time"
 
 	sdk "github.com/CometBackup/comet-go-sdk/v2"
@@ -83,6 +84,11 @@ func (c *Client) ListJobs(ctx context.Context, start, end int64) error {
 		return err
 	}
 
+	// Sort jobs by StartTime
+	sort.Slice(jobs, func(i, j int) bool {
+		return jobs[i].StartTime < jobs[j].StartTime
+	})
+
 	for _, j := range jobs {
 		var e, pitem string
 		var dur time.Duration = 0
@@ -113,7 +119,7 @@ func (c *Client) ListJobs(ctx context.Context, start, end int64) error {
 		}
 		lines = append(lines, line)
 
-		// fmt.Printf("%-30s  %-40.40s  %-14s  %-10s  %s  %s\n", j.Username, pitem, jobClassificationText(j.Classification), jobStatusText(j.Status), time.Unix(j.StartTime, 0).Format("2006-01-02 15:04:05"), e)
+		// fmt.Printf("DEBUG: %-30s  %-40.40s  %-14s  %-10s  %s  %s\n", j.Username, pitem, jobClassificationText(j.Classification), jobStatusText(j.Status), time.Unix(j.StartTime, 0).Format("2006-01-02 15:04:05"), e)
 	}
 
 	// https://github.com/olekukonko/tablewriter/blob/master/MIGRATION.md
